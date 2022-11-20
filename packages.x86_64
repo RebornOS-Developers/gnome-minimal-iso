@@ -294,14 +294,18 @@ linux-headers
 # ========
 # Graphics
 # ========
-xfce4
-xfce4-goodies
-# Enabled using ln -s /usr/lib/systemd/system/lightdm.service airootfs/etc/systemd/system/display-manager.service
-lightdm
-# gdm
+gnome
+gnome-tweaks
+dconf-editor
+gnome-shell-extensions
+gnome-shell-extension-appindicator
+gnome-shell-extension-dash-to-dock
+# lightdm
+# Enabled using ln -s /usr/lib/systemd/system/gdm.service airootfs/etc/systemd/system/display-manager.service
+gdm
 xorg
 noto-fonts-emoji
-hicolor-icon-theme
+# hicolor-icon-theme
 lightdm-slick-greeter
 
 # --------------
@@ -333,7 +337,7 @@ python
 firefox
 packagekit
 xdg-desktop-portal
-xdg-desktop-portal-gtk
+xdg-desktop-portal-gnome
 pamac-aur
 wget
 curl
