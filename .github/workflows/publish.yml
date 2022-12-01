@@ -1,0 +1,40 @@
+name: Publish
+run-name: ${{ github.actor }} triggered a publication
+on:
+  - workflow_dispatch
+  - workflow_call
+jobs:
+  publish:
+    runs-on: ubuntu-20.04
+    steps:
+      - id: download_iso_artifact_step
+        name: Download ISO Artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: main
+          name: built-iso
+      # - id: display_artifacts_step
+      #   name: Display the downloaded Artifacts
+      #   run: ls -ltr .
+      - id: create_release_step
+        name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: true
+          prerelease: true
+      - id: upload_release_asset_step
+        name: Upload Release Assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release_step.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ./rebornos*.iso
+          asset_name: rebornos-xfce-minimal.iso
+          asset_content_type: application/ISO
